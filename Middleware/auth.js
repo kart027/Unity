@@ -1,7 +1,8 @@
-const User = require("../models/Usermodels");
+const User = require("../Model/userModel");
 const jwt = require("jsonwebtoken");
 const  ErrorHandler  = require("../utils/Errorhandler");
-const { CatchAsyncError } =require("../middlewares/CatchAsyncError");
+const { CatchAsyncError } =require("../Middleware/CatchAsyncError");
+
 
 exports.isAuthenticated = CatchAsyncError(async (req,res,next) =>{
     
@@ -18,19 +19,19 @@ exports.isAuthenticated = CatchAsyncError(async (req,res,next) =>{
     })
 
 
-    exports.isAuthorizedadmin = CatchAsyncError(async (req,res,next) =>{
-    if(req.user.role!="admin"){
+    exports.issellers = CatchAsyncError(async (req,res,next) =>{
+    if(req.user.userType !="seller"){
         return next(new ErrorHandler("You are not allowed to perform this action",403))
     }
     next();
     
     })
 
+exports.isbuyers = CatchAsyncError(async (req, res, next) => {
+    if (req.user.userType != "buyers") {
+        return next(new ErrorHandler("You are not allowed to perform this action", 403))
+    }
+    next();
 
-    exports.isAuthorizeSubscriber = CatchAsyncError(async (req,res,next) =>{
-        if(req.user.subscription.status !== "active" && req.user.role!=="admin"){
-            return next(new ErrorHandler("You are not allowed to perform this action",403))
-        }
-        next();
-        
-        })
+})
+

@@ -7,7 +7,7 @@ const { sendToken } = require("../utils/SendToken");
 
 exports.register = CatchAsyncError(async (req, res, next) => {
     const { username, userType, email, password } = req.body;
-    const file = req.file;
+    console.log(req.body)
 
 
     if (!username || !email || !password || !userType) {
