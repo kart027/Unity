@@ -12,16 +12,17 @@ require("dotenv").config({
 });
 const app = express();
 const { connectDb } = require("./Config/Database")
-app.use(express.json());
 connectDb();
 
 
-app.use(ErrorMiddleware)
+// app.use(ErrorMiddleware)
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 
 app.use("/api/auth",userRoutes)
 app.use("/api/buyer",buyerRoutes)
 app.use("/api/seller",sellerRoute)
+app.use(ErrorMiddleware)
 
 app.listen(process.env.PORT,()=>{
     console.log("hi")

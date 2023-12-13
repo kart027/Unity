@@ -4,6 +4,7 @@ const ErrorHandler = require("../utils/Errorhandler");
 const User = require("../Model/userModel");
 const { CatchAsyncError } = require("../Middleware/CatchAsyncError");
 const Catalog = require("../Model/CatologModel")
+const Order = require("../Model/OrderModel")
 
 
 
@@ -23,8 +24,8 @@ exports.getSellers = CatchAsyncError(async(req,res)=>{
 
 exports.getSellerCatalog = CatchAsyncError(async (req, res) => {
     try{
-    const { seller_id } = req.params;
-    const catalog = await Catalog.find({ seller_id: seller_id }).populate('products'); // Assuming a reference to products in the Catalog model
+    const { sellerId } = req.params;
+    const catalog = await Catalog.find({ seller_id: sellerId }).populate('products'); // Assuming a reference to products in the Catalog model
     res.status(200).json({ catalog });
 } catch (error) {
     res.status(500).json({ error: error.message });
@@ -33,23 +34,36 @@ exports.getSellerCatalog = CatchAsyncError(async (req, res) => {
 
 
 })
-exports.createOrder = CatchAsyncError(async (req, res) => {
+
+
+
+exports.createorder = CatchAsyncError(async(req,res,next)=>{
   try {
-    const seller_id = req.params;
-    const {  products } = req.body;
+   const { sellerId } = req.params;
+    const buyer_id = req.user._id;
+    const { products } = req.body;
+    // console.log(products)
 
+    if(products.length == 0){
+      return next(new ErrorHandler("please add atleast one product",400))
+    }
 
-    const order = new Order({
+    const newworder = await Order.create({
+      seller_id: sellerId,
       buyer_id,
-      seller_id,
-      products 
-    });
+      products
+    })
 
-    await order.save();
-
-    res.status(201).json({ message: 'Order created successfully', order });
+    res.status(200).json({
+      message: "sucessful",
+      newworder
+    })
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.log(error)
+    res.status(500).json({error})
   }
-});
+  
+}
+)
+
 

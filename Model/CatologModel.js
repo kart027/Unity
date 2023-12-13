@@ -2,7 +2,7 @@
 const mongoose = require('mongoose'); 
 
 const catalogSchema = new mongoose.Schema({
-    seller_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    seller_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
 });
 

@@ -36,6 +36,7 @@ exports.register = CatchAsyncError(async (req, res, next) => {
 
 exports.login = CatchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;
+    console.log(req.body)
 
     if (!email || !password) {
         return next(new ErrorHandler("Please addd all field", 400))
@@ -50,7 +51,7 @@ exports.login = CatchAsyncError(async (req, res, next) => {
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-        return next(new ErrorHandler(" Incoreect Email or password  "))
+        return next(new ErrorHandler(" Incoreect Email or password ",400))
     }
 
     sendToken(res, user, "Welcome back",)

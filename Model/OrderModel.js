@@ -5,4 +5,4 @@ const orderSchema = new mongoose.Schema({
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
 });
 
-module.exports = new mongoose.model('Order', orderSchem)
+module.exports = new mongoose.model('Order', orderSchema)
